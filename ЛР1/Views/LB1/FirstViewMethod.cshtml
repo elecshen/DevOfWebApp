@@ -1,0 +1,10 @@
+﻿@model List<string>
+@{
+	ViewBag.Title = "FirstViewMethod";
+}
+
+<h2>Список овощей</h2>
+
+@foreach(var veg in Model) {
+	<div>@veg</div>
+}
