@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DevOfWebApp.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using ЛР1.Models;
 
-namespace ЛР1.Controllers
+namespace DevOfWebApp.Controllers
 {
 	public class HomeController : Controller
 	{

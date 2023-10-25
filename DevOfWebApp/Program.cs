@@ -1,4 +1,6 @@
-namespace ЛР1
+using DevOfWebApp.Models;
+
+namespace DevOfWebApp
 {
 	public class Program
 	{
@@ -7,6 +9,7 @@ namespace ЛР1
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+			builder.Services.AddDbContext<LocalDBContext>();
 			builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
@@ -28,7 +31,7 @@ namespace ЛР1
 
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=LB1}/{action=FirstViewMethod}/{id?}");
+				pattern: "{controller=Main}/{action=Index}/{id?}");
 
 			app.Run();
 		}

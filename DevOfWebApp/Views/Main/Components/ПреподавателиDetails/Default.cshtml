@@ -1,0 +1,46 @@
+﻿@model DevOfWebApp.Models.Entities.Преподаватели
+
+<dl class="row">
+    <dt class="col-sm-2">
+        <label asp-for="Фамилия" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Фамилия
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="Имя" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Имя
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="Отчество" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Отчество
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="Должность" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Должность
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="СеменйноеПоложение" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.СеменйноеПоложение
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="IdИнститутаNavigation" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.IdИнститутаNavigation.Наименование
+    </dd>
+    <dt class="col-sm-2">
+        <label asp-for="КодУчёногоЗванияNavigation" class="control-label"></label>
+    </dt>
+    <dd class="col-sm-10">
+        @Model.КодУчёногоЗванияNavigation.Наименование
+    </dd>
+</dl>

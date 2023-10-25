@@ -1,0 +1,74 @@
+﻿@model DevOfWebApp.Models.ViewModels.LecturerVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Преподаватели</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdПреподавателя" />
+            <div class="form-group">
+                <label asp-for="IdИнститута" class="control-label"></label>
+                <select asp-for="IdИнститута" class="form-control" asp-items="ViewBag.IdИнститута"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Фамилия" class="control-label"></label>
+                <input asp-for="Фамилия" class="form-control" />
+                <span asp-validation-for="Фамилия" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Имя" class="control-label"></label>
+                <input asp-for="Имя" class="form-control" />
+                <span asp-validation-for="Имя" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Отчество" class="control-label"></label>
+                <input asp-for="Отчество" class="form-control" />
+                <span asp-validation-for="Отчество" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Должность" class="control-label"></label>
+                <input asp-for="Должность" class="form-control" />
+                <span asp-validation-for="Должность" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="СеменйноеПоложение" class="control-label"></label>
+                <input asp-for="СеменйноеПоложение" class="form-control" />
+                <span asp-validation-for="СеменйноеПоложение" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="КодУчёногоЗвания" class="control-label"></label>
+                <select asp-for="КодУчёногоЗвания" class="form-control" asp-items="ViewBag.КодУчёногоЗвания"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="control-label"></label>
+                <input asp-for="Birthday" class="form-control" asp-format="{0:yyyy-MM-dd}" type="date"/>
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsertedDateTime" class="control-label"></label>
+                <input asp-for="InsertedDateTime" class="form-control" asp-format="{0:yyyy-MM-ddThh:mm}" type="datetime-local"/>
+                <span asp-validation-for="InsertedDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WakeUpTime" class="control-label"></label>
+                <input asp-for="WakeUpTime" class="form-control" asp-format="{0:HH:mm:ss}" type="time"/>
+                <span asp-validation-for="WakeUpTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
