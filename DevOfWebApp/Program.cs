@@ -36,10 +36,10 @@ namespace DevOfWebApp
 
             app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=Main}/{action=Index}");
+				pattern: "{controller=Main}/{action=Index}/{id?}");
             app.MapControllerRoute(
-                name: "login",
-                pattern: "/{action=Login}",
+                name: "briefDefault",
+                pattern: "/{action=Index}/{id?}",
 				new {controller = "Main"});
 
             app.Run();

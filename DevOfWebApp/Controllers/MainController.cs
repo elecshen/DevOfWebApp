@@ -156,9 +156,14 @@ namespace DevOfWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit( LecturerVM lecturer)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(Guid? id, LecturerVM lecturer)
 		{
 			using var context = new LocalDBContext();
+            if (id != lecturer.IdПреподавателя)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
