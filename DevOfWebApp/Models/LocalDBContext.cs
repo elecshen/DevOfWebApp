@@ -16,6 +16,10 @@ public partial class LocalDBContext : DbContext
     {
     }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
     public virtual DbSet<Институты> Институтыs { get; set; }
 
     public virtual DbSet<Преподаватели> Преподавателиs { get; set; }
@@ -34,6 +38,20 @@ public partial class LocalDBContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Cyrillic_General_CI_AI");
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.Property(e => e.IdRole).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.IdUser).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Role");
+        });
 
         modelBuilder.Entity<Институты>(entity =>
         {

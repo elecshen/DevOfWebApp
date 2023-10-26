@@ -1,4 +1,5 @@
 using DevOfWebApp.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DevOfWebApp
 {
@@ -11,8 +12,11 @@ namespace DevOfWebApp
 			// Add services to the container.
 			builder.Services.AddDbContext<LocalDBContext>();
 			builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options => options.LoginPath = "/login");
 
-			var app = builder.Build();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
@@ -27,13 +31,18 @@ namespace DevOfWebApp
 
 			app.UseRouting();
 
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.MapControllerRoute(
+            app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=Main}/{action=Index}/{id?}");
+				pattern: "{controller=Main}/{action=Index}");
+            app.MapControllerRoute(
+                name: "login",
+                pattern: "/{action=Login}",
+				new {controller = "Main"});
 
-			app.Run();
+            app.Run();
 		}
 	}
 }

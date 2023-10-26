@@ -14,19 +14,19 @@ public partial class Преподаватели
     [Column("ID института")]
     public Guid IdИнститута { get; set; }
 
-	[StringLength(50)]
+    [StringLength(50)]
     [Unicode(false)]
     public string Фамилия { get; set; } = null!;
 
-	[StringLength(50)]
+    [StringLength(50)]
     [Unicode(false)]
     public string Имя { get; set; } = null!;
 
-	[StringLength(50)]
+    [StringLength(50)]
     [Unicode(false)]
     public string Отчество { get; set; } = null!;
 
-	[StringLength(50)]
+    [StringLength(50)]
     [Unicode(false)]
     public string Должность { get; set; } = null!;
 
@@ -36,7 +36,7 @@ public partial class Преподаватели
     [Unicode(false)]
     public string СеменйноеПоложение { get; set; } = null!;
 
-	[Column("Код учёного звания")]
+    [Column("Код учёного звания")]
     public int КодУчёногоЗвания { get; set; }
 
     [Display(Name = "Институт")]

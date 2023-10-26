@@ -4,12 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using DevOfWebApp.Models;
 using DevOfWebApp.Models.Entities;
 using DevOfWebApp.Models.ViewModels;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace DevOfWebApp.Controllers
 {
     public class MainController : Controller
     {
-
         public MainController()
         {
         }
@@ -21,6 +26,63 @@ namespace DevOfWebApp.Controllers
             return View(await IndexOutputList.ToListAsync());
         }
 
+        public string GeneratePassHash(string pass, Guid? salt)
+        {
+            salt ??= Guid.NewGuid();
+            return string.Format("Pass: {0}\nSalt: {1}\nPassHash: {2}", pass, salt.ToString(), ReturnPassHash(pass, salt.Value));
+        }
+
+        private string ReturnPassHash(string pass, Guid salt)
+        {
+            var s = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(pass + salt.ToString()));
+            StringBuilder stringBuilder = new();
+            foreach (var d in s)
+                stringBuilder.Append(d.ToString("x2"));
+            return stringBuilder.ToString();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserVM userVM, string? returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                using var context = new LocalDBContext();
+                User? user = context.Users.Where(u => u.Login == userVM.Login).Include(r => r.Role).FirstOrDefault();
+                if (user is not null && user.PasswordHash == ReturnPassHash(userVM.Password, user.Salt))
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                        new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                    };
+                    ClaimsIdentity id = new(
+                        claims, 
+                        "ApplicationCookie", 
+                        ClaimsIdentity.DefaultNameClaimType, 
+                        ClaimsIdentity.DefaultRoleClaimType
+                    );
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+                    return Redirect(returnUrl??"/");
+                }
+                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            return View(userVM);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
 		{
 			using var context = new LocalDBContext();
@@ -41,6 +103,7 @@ namespace DevOfWebApp.Controllers
             return View(преподаватели);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
 		{
 			using var context = new LocalDBContext();
@@ -51,6 +114,7 @@ namespace DevOfWebApp.Controllers
 
 		[HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(LecturerVM lecturer)
 		{
 			using var context = new LocalDBContext();
@@ -67,6 +131,7 @@ namespace DevOfWebApp.Controllers
 			return View(lecturer);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid? id)
 		{
 			using var context = new LocalDBContext();
@@ -91,13 +156,9 @@ namespace DevOfWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, LecturerVM lecturer)
+        public async Task<IActionResult> Edit( LecturerVM lecturer)
 		{
 			using var context = new LocalDBContext();
-			if (id != lecturer.IdПреподавателя)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -117,6 +178,7 @@ namespace DevOfWebApp.Controllers
 			return View(lecturer);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
 		{
 			using var context = new LocalDBContext();
@@ -139,6 +201,7 @@ namespace DevOfWebApp.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
 		{
 			using var context = new LocalDBContext();
