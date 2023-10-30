@@ -14,7 +14,7 @@ namespace DevOfWebApp
 			builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(options => options.LoginPath = "/login");
+				.AddCookie(options => { options.LoginPath = "/login"; options.AccessDeniedPath = "/"; });
 
             var app = builder.Build();
 
